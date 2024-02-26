@@ -15,7 +15,7 @@ This is a simple application to test if more than 1000 users can vote using Inta
 ## Installation
 
     1. To install dependencies and build for the environment, run `npm install && npm run build`
-    2. You can you `nginx` to deploy the app, after running `npm start`. Diverse tools can be used to deploy this app depending on the enviroment.
+    2. You can use `nginx` to deploy the app, after running `npm start`. Diverse tools can be used to deploy this app depending on the enviroment.
 
 ## Environment Variables
 
