@@ -20,7 +20,7 @@ const Survey = ({ onSubmit }) => {
   const platform = typeof window !== "undefined" && window.navigator.platform;
 
   const [ranking, setRanking] = useState(0);
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState("Good 😊");
   const [code, setCode] = useState(0);
   const [messageApi, contextHolder] = message.useMessage();
   const [submitting, setSubmitting] = useState(false);
@@ -41,19 +41,22 @@ const Survey = ({ onSubmit }) => {
     // alert(value);
     setSubmitting(true);
     try {
-      const response = await fetch("http://localhost:3001/survey", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ranking: {
-            rank: value,
-            code,
-            device: userAgent,
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BCKEND_URL}/survey`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        }),
-      });
+          body: JSON.stringify({
+            ranking: {
+              rank: value,
+              code,
+              device: userAgent,
+            },
+          }),
+        }
+      );
 
       if (response.ok) {
         message.success("Survey response added successfully", 5);
@@ -65,6 +68,8 @@ const Survey = ({ onSubmit }) => {
     } catch (error) {
       console.error("Error:", error);
     } finally {
+      setValue(null);
+      setCode(null);
       setSubmitting(false);
     }
   };
@@ -72,12 +77,15 @@ const Survey = ({ onSubmit }) => {
   const handleGetResults = async (e) => {
     setLoadingResults(true);
     try {
-      const response = await fetch("http://localhost:3001/survey/summary", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BCKEND_URL}/survey/summary`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.ok) {
         const results_ = await response.json();
@@ -134,7 +142,12 @@ const Survey = ({ onSubmit }) => {
           </Space>
         </Radio.Group>
 
-        <Button type="primary" onClick={handleSubmit} loading={submitting}>
+        <Button
+          type="primary"
+          onClick={handleSubmit}
+          loading={submitting}
+          disabled={!code || !value}
+        >
           Submit
         </Button>
       </div>
