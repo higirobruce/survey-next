@@ -1,4 +1,4 @@
-# Project Name
+# SurveyApp
 
 A Survey app used to collect feedback from users.
 
